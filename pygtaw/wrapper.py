@@ -46,7 +46,7 @@ class Client(object):
     @staticmethod
     def _validate_lang(lang):
         try:
-            return LANGUAGE_CODES['target']
+            return LANGUAGE_CODES[lang]
         except KeyError:
             raise UnsupportedLanguageError('Google Translate does not currently support {}'.format(lang))
 
