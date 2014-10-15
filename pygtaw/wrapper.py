@@ -1,5 +1,5 @@
 import requests
-from langs import langs
+from langs import LANGUAGE_CODES, LANGUAGE_NAMES
 from exceptions import UnsupportedLanguageError
 
 
@@ -71,9 +71,7 @@ class Translation(object):
         self._source = source
 
     def get_source_language(self, detected_lang_code):
-        for language, code in langs.iteritems():
-            if code == detected_lang_code:
-                return language
+        return LANGUAGE_NAMES.get(detected_lang_code)
 
     @property
     def detected_source_language(self):

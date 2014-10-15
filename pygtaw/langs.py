@@ -1,4 +1,4 @@
-langs = {
+LANGUAGE_CODES = {
     'Afrikaans': 'af',
     'Albanian': 'sq',
     'Arabic': 'ar',
@@ -64,3 +64,5 @@ langs = {
     'Welsh': 'cy',
     'Yiddish': 'yi'
 }
+
+LANGUAGE_NAMES = {v: k for k, v in LANGUAGE_CODES.iteritems()}
