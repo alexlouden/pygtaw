@@ -1,6 +1,7 @@
 import unittest
 from pygtaw import wrapper
 
+
 class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
 
     def setUp(self):
@@ -24,10 +25,10 @@ class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
 
     def test_try_get_detected_source_lang(self):
         query = self.client.translate('El mundo', target='English', source='Spanish')
-        self.assertEqual(query.detected_source_language,
-            'No detected source language, source provided by user: Spanish')
+        self.assertEqual(
+            query.detected_source_language,
+            'No detected source language, source provided by user: Spanish'
+        )
 
     def tearDown(self):
         self.make_client()
-
-
