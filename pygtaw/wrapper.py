@@ -3,6 +3,7 @@ from langs import langs
 
 
 class Client(object):
+
     def __init__(self, api_key):
         """
         api_key: type <str>, see https://cloud.google.com/translate
@@ -48,7 +49,9 @@ class Client(object):
         except TypeError:
             return '[query] and [target] parameters are required.'
 
+
 class Translation(object):
+
     def __init__(self, response, source=None):
         """
         response: Object returned from Client's translate request.
@@ -73,9 +76,8 @@ class Translation(object):
             return self.get_source_language(self._response['detectedSourceLanguage'])
         except KeyError:
             return 'No detected source language, source provided by user: {}'.format(self._source)
-    
+
     @property
     def translated_text(self):
         """Returns the translated text."""
         return self._response['translatedText']
-
