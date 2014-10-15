@@ -1,5 +1,6 @@
 import requests
 from langs import langs
+from exceptions import UnsupportedLanguageError
 
 
 class Client(object):
@@ -14,7 +15,7 @@ class Client(object):
         self._url = 'https://www.googleapis.com/language/translate/v2?'
         self._source = None
 
-    def build_payload(self, query, target, source):
+    def _build_payload(self, query, target, source):
         """
         Builds a dictionary of parameters as payload
         for the HTTP request.
@@ -24,7 +25,7 @@ class Client(object):
             payload['source'] = source
         return payload
 
-    def handle_response(self, response, source):
+    def _handle_response(self, response, source):
         """
         response: Object returned from requests, presumably
         passed from self.translate().
@@ -32,6 +33,13 @@ class Client(object):
         """
         self._response = response.json()['data']['translations'][0]
         return Translation(self._response, source)
+
+    @staticmethod
+    def _validate_lang(lang):
+        try:
+            return LANGUAGE_CODES['target']
+        except KeyError:
+            raise UnsupportedLanguageError('Google Translate does not currently support {}'.format(lang))
 
     def translate(self, query, target, source=None):
         """
@@ -42,12 +50,13 @@ class Client(object):
         detect source language.
 
         """
-        try:
-            query.decode(encoding='utf-8')
-            payload = self.build_payload(query, langs[target], langs.get(source, None))
-            return self.handle_response(requests.get(self._url, params=payload), source)
-        except TypeError:
-            return '[query] and [target] parameters are required.'
+        target_lang = self._validate_lang(target)
+        source_lang = self._validate_lang(source) if source else None
+
+        query.decode(encoding='utf-8')  # Does this do anything?
+        payload = self._build_payload(query, target_lang, source_lang)
+        r = requests.get(self._url, params=payload)
+        return self._handle_response(r, source)
 
 
 class Translation(object):
