@@ -35,7 +35,12 @@ class Client(object):
         passed from self.translate().
         Returns a Translation object.
         """
-        self._response = response.json()['data']['translations'][0]
+        try:
+            self._response = response.json()['data']['translations'][0]
+        except KeyError:
+            # TODO handle missing 'data' key
+            pass
+
         return Translation(self._response, source)
 
     @staticmethod
