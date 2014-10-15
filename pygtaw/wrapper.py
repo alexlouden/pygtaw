@@ -1,6 +1,6 @@
 import requests
 from langs import LANGUAGE_CODES, LANGUAGE_NAMES
-from exceptions import UnsupportedLanguageError
+from exceptions import UnsupportedLanguageError, TranslationError
 
 
 class Client(object):
@@ -37,11 +37,12 @@ class Client(object):
         """
         try:
             self._response = response.json()['data']['translations'][0]
+            return Translation(self._response, source)
         except KeyError:
             # TODO handle missing 'data' key
-            pass
-
-        return Translation(self._response, source)
+            # Handle 500s
+            # Handle no response
+            raise TranslationError(response.json())
 
     @staticmethod
     def _validate_lang(lang):
